@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!--<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">-->
+<head>
+    <meta charset="UTF-8">
+    <title>TimeLine</title>
+</head>
+
+<style>
+    div#app{
+        border: 1px solid cornflowerblue;
+        /*border-radius: 8px;*/
+        margin: 20px auto;
+        width: 400px;
+        height: 600px;
+        /*padding: 20px;  !*内边距*!*/
+        margin-top: 1.3cm;
+    }
+
+    div#refresh{
+        border-bottom: 1px solid cornflowerblue;
+        height:80px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:x-large;
+        line-height: 80px;
+        text-align: left;
+    }
+
+    .button-1{
+        border-radius: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: large;
+        background:white;
+        border:1px solid cornflowerblue;
+        margin-left: 2cm;
+        width: 2.7cm;
+        height: 1cm;
+    }
+    .button-1:hover{
+        border-radius: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: large;
+        background: mintcream;
+        border:1px solid cornflowerblue;
+        margin-left: 2cm;
+        width: 2.7cm;
+        height: 1cm;
+    }
+
+    .button-2{
+        border-radius: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: large;
+        background:white;
+        border:1px solid cornflowerblue;
+        width: 2.7cm;
+        height: 1cm;
+    }
+    .button-2:hover{
+        border-radius: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: large;
+        background: mintcream;
+        border:1px solid cornflowerblue;
+        width: 2.7cm;
+        height: 1cm;
+    }
+
+    div#comment{
+        /*position: absolute;*/
+        height:450px;
+        width: 400px;
+        overflow: auto;
+    }
+
+    .name{
+        font-family: Arial, Helvetica, sans-serif;
+        margin-left: 20px;
+        margin-top: 10px;
+        width: 100px;
+        float: left;
+        text-align: left;
+    }
+
+    .interval{
+        font-family: Arial, Helvetica, sans-serif;
+        margin-top: 10px;
+        width: 100px;
+        margin-left: 142px;
+        float: left;
+        text-align: right;
+    }
+
+    .content{
+        font-family: Arial, Helvetica, sans-serif;
+        margin-top: 5px;
+        margin-left: 15px;
+        margin-right: 30px;  /*想要调整位置，主要是改width和margin-right*/
+        width: 350px;
+        word-wrap:break-word;
+    }
+</style>
+
+<body style="text-align: center">
+
+    <div id="app">
+        <div id="refresh">
+            <a style="margin:40px"><b>Timeline</b></a>
+            <button class="button-1"  @click="upload">内容更新</button>
+        </div>
+
+        <div id="comment" >
+            <div v-for="comment in commentList">
+                <div>                    <div class="name">{{comment.name}}</div>
+                    <div class="interval">{{comment.time}}</div>
+                </div>
+                <div class="content">{{comment.content}}</div>
+                <div style="margin-left: -20px">  ----------------------------------------------------------------</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px">
+            <button class="button-2" @click="load">更多...</button>
+        </div>
+    </div>
+
+<script src="js/vue/2.5.16/vue.min.js"></script>    <!--产生Vue对象-->
+<script src="js/jquery/2.0.0/jquery.min.js"></script>       <!--//产生$-->
+<script src="js/axios/0.17.1/axios.min.js"></script>
+<script>
+    var vue = new Vue({
+        el:"#app",    //必须绑定最大的那个div的id，如果只是绑定comment，则两个按钮的功能会失效
+        data: {
+            commentList: []
+        },
+        created: function () {
+            //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+            var self = this;
+            $.ajax({
+                url: 'api/uploadComment',
+                type: 'get',
+                data: {},
+                dataType: 'json'
+            }).then(function (res) {
+                var i;
+                console.log(formatDateTime(12345567));
+                for(i=0;i < res.length; i++){    //把读取到的毫秒数转化为“刚刚”等描述
+                    res[i].time = timeChange(res[i].time);    //timeChange(med)才是返回“刚刚”，med本身不变的。
+
+                }
+                //把从json获取的数据赋值给数组
+                self.commentList = res;
+            }).fail(function () {
+                console.log('失败');
+            })
+        },
+        methods: {
+            upload: function () {
+                var self = this;
+                $.ajax({
+                    url: 'api/uploadComment',
+                    type: 'get',
+                    data: {},
+                    dataType: 'json'
+                }).then(function (res) {
+                    var i;
+                    for (i = 0; i < res.length; i++) {    //把读取到的毫秒数转化为“刚刚”等描述
+                        res[i].time = timeChange(res[i].time);    //timeChange(med)才是返回“刚刚”，med本身不变的。
+                    }
+                    //把从json获取的数据赋值给数组
+                    self.commentList = res;
+                }).fail(function () {
+                    console.log('失败');
+                })
+            },
+            load: function () {
+                var self = this;
+                $.ajax({
+                    url: 'api/loadComment',
+                    type: 'get',
+                    data: {},
+                    dataType: 'json'
+                }).then(function (res) {
+                    var i;
+                    for (i = 0; i < res.length; i++) {    //把读取到的毫秒数转化为“刚刚”等描述
+                        res[i].time = timeChange(res[i].time);    //timeChange(med)才是返回“刚刚”，med本身不变的。
+                    }
+                    //把从json获取的数据赋值给数组
+                    self.commentList = res;
+                }).fail(function () {
+                    console.log('失败');
+                })
+            }
+        }
+    });
+
+
+    // function upload() {
+    //     var xmlhttp;
+    //     if (window.XMLHttpRequest){//IE7+, Firefox, Chrome, Opera, Safari
+    //         xmlhttp = new XMLHttpRequest();
+    //     }
+    //     else{// IE6, IE5
+    //         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    //     }
+    //     xmlhttp.onreadystatechange=function(){
+    //         if (xmlhttp.readyState===4 && (xmlhttp.status===200||xmlhttp.status===0))
+    //         {
+    //             var text = xmlhttp.responseText;//使用接口返回内容，响应内容
+    //             var commentList = eval("("+text+")");//把响应内容对象转成javascript对象
+    //             // console.log(typeof (resultJson));  数据格式是Object
+    //             // console.log(typeof (resultJson[0]));   数据格式还是Object
+    //             // console.log(typeof (resultJson[0].content));   数据格式是String了
+    //             // var name = commentList[0].name;
+    //             // document.getElementById("content").innerHTML = commentList[0].content;   使用JS更改数据方法
+    //         }
+    //     }
+    //     xmlhttp.open("GET","api/uploadComment",true);
+    //     xmlhttp.send();
+    //     //window.location.reload();
+    // }
+
+
+    /*实现时间戳*/
+        function formatDateTime(timeValue) {
+            var date = new Date(timeValue);
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;
+            var d = date.getDate();
+            d = d < 10 ? ('0' + d) : d;
+            var h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            var minute = date.getMinutes();
+            var second = date.getSeconds();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            second = second < 10 ? ('0' + second) : second;
+            return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+        };
+        //判断传入日期是否为昨天
+        function isYestday(timeValue) {
+            var date = (new Date()); //当前时间
+            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(); //今天凌晨
+            var yestday = new Date(today - 24 * 3600 * 1000).getTime();
+            return timeValue < today && yestday <= timeValue;
+        };
+        //判断传入日期是否属于今年
+        function isYear (timeValue) {
+            var takeNewYear = formatDateTime(timeValue).substr(0,4); //当前时间的年份
+            var takeTimeValue = formatDateTime(timeValue).substr(0,4); //传入时间的年份
+            return takeTimeValue == takeNewYear;
+        }
+        //60000 1分钟
+        //3600000 1小时
+        //86400000 24小时
+        //对传入时间进行时间转换
+
+        function timeChange(timeValue) {
+            var timeNew = Date.parse(new Date()); //当前时间
+            var timeDiffer = timeNew - timeValue; //与当前时间误差
+            var returnTime = '有东西';
+            if(timeDiffer <= 60000) { //一分钟内
+                var returnTime = '刚刚';
+            } else if(timeDiffer > 60000 && timeDiffer < 3600000) { //1小时内
+                var returnTime = Math.floor(timeDiffer / 60000 )+ '分钟前';
+            } else if(timeDiffer >= 3600000 && timeDiffer < 86400000 && !isYestday(timeValue)) { //今日
+                var returnTime = formatDateTime(timeValue).substr(11,5);
+            } else if(timeDiffer > 3600000 && isYestday( timeValue)) { //昨天
+                var returnTime = '昨天'+formatDateTime( timeValue).substr(11,5);
+            } else if (timeDiffer > 86400000 && !isYestday(timeValue) && isYear (timeValue)){	//今年
+                var returnTime = formatDateTime(timeValue).substr(5,11);
+            } else if (timeDiffer > 86400000 && !isYestday( timeValue) && !isYear (timeValue)) { //不属于今年
+                var returnTime = formatDateTime(timeValue).substr(0,11);
+            }
+            return returnTime;
+        }
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
