@@ -8,10 +8,10 @@ import java.util.Date;
 public class Comment {
     private String name;
     private String content;
-    private long time;
+    private String time;
 
 
-    public Comment(String name,String content,long time){
+    public Comment(String name,String content,String time){
         this.name = name;
         this.content = content;
         this.time = time;
@@ -31,10 +31,10 @@ public class Comment {
         this.content = content;
     }
 
-    public long getTime() {
+    public String getTime() {
         return time;
     }
-    public void setTime(long time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

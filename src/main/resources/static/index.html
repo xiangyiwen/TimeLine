@@ -133,8 +133,7 @@
             commentList: []
         },
         created: function () {
-            //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-            var self = this;
+            var self = this;        //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
             $.ajax({
                 url: 'api/uploadComment',
                 type: 'get',
@@ -142,13 +141,11 @@
                 dataType: 'json'
             }).then(function (res) {
                 var i;
-                console.log(formatDateTime(12345567));
                 for(i=0;i < res.length; i++){    //把读取到的毫秒数转化为“刚刚”等描述
                     res[i].time = timeChange(res[i].time);    //timeChange(med)才是返回“刚刚”，med本身不变的。
 
                 }
-                //把从json获取的数据赋值给数组
-                self.commentList = res;
+                self.commentList = res;       //把从json获取的数据赋值给数组
             }).fail(function () {
                 console.log('失败');
             })
@@ -221,66 +218,60 @@
 
 
     /*实现时间戳*/
-        function formatDateTime(timeValue) {
-            var date = new Date(timeValue);
-            var y = date.getFullYear();
-            var m = date.getMonth() + 1;
-            m = m < 10 ? ('0' + m) : m;
-            var d = date.getDate();
-            d = d < 10 ? ('0' + d) : d;
-            var h = date.getHours();
-            h = h < 10 ? ('0' + h) : h;
-            var minute = date.getMinutes();
-            var second = date.getSeconds();
-            minute = minute < 10 ? ('0' + minute) : minute;
-            second = second < 10 ? ('0' + second) : second;
-            return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-        };
+        // function formatDateTime(timeValue) {
+        //     var date = new Date(timeValue);
+        //     var y = date.getFullYear();
+        //     var m = date.getMonth() + 1;
+        //     m = m < 10 ? ('0' + m) : m;
+        //     var d = date.getDate();
+        //     d = d < 10 ? ('0' + d) : d;
+        //     var h = date.getHours();
+        //     h = h < 10 ? ('0' + h) : h;
+        //     var minute = date.getMinutes();
+        //     var second = date.getSeconds();
+        //     minute = minute < 10 ? ('0' + minute) : minute;
+        //     second = second < 10 ? ('0' + second) : second;
+        //     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+        // };
         //判断传入日期是否为昨天
         function isYestday(timeValue) {
-            var date = (new Date()); //当前时间
+            var time = (new Date(timeValue)).getTime();
+            var date = new Date(); //当前时间
             var today = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(); //今天凌晨
             var yestday = new Date(today - 24 * 3600 * 1000).getTime();
-            return timeValue < today && yestday <= timeValue;
+            return time < today && yestday <= time;
         };
+
         //判断传入日期是否属于今年
         function isYear (timeValue) {
-            var takeNewYear = formatDateTime(timeValue).substr(0,4); //当前时间的年份
-            var takeTimeValue = formatDateTime(timeValue).substr(0,4); //传入时间的年份
-            return takeTimeValue == takeNewYear;
+            var date = new Date();
+            var takeNewYear = date.getFullYear(); //当前时间的年份
+            var takeTimeValue = parseInt(timeValue.substr(0,4)); //传入时间的年份
+            return takeTimeValue == takeNewYear;  //等于-1则不是今年
         }
-        //60000 1分钟
-        //3600000 1小时
-        //86400000 24小时
-        //对传入时间进行时间转换
 
         function timeChange(timeValue) {
+            var time = (new Date(timeValue)).getTime();
+
             var timeNew = Date.parse(new Date()); //当前时间
-            var timeDiffer = timeNew - timeValue; //与当前时间误差
-            var returnTime = '有东西';
+            var timeDiffer = timeNew - time; //与当前时间误差
+            var returnTime = '';
             if(timeDiffer <= 60000) { //一分钟内
                 var returnTime = '刚刚';
             } else if(timeDiffer > 60000 && timeDiffer < 3600000) { //1小时内
                 var returnTime = Math.floor(timeDiffer / 60000 )+ '分钟前';
             } else if(timeDiffer >= 3600000 && timeDiffer < 86400000 && !isYestday(timeValue)) { //今日
-                var returnTime = formatDateTime(timeValue).substr(11,5);
+                var returnTime = timeValue.substr(11,5);
             } else if(timeDiffer > 3600000 && isYestday( timeValue)) { //昨天
-                var returnTime = '昨天'+formatDateTime( timeValue).substr(11,5);
+                var returnTime = '昨天'+ timeValue.substr(11,5);
             } else if (timeDiffer > 86400000 && !isYestday(timeValue) && isYear (timeValue)){	//今年
-                var returnTime = formatDateTime(timeValue).substr(5,11);
+                var returnTime = timeValue.substr(5,11);
             } else if (timeDiffer > 86400000 && !isYestday( timeValue) && !isYear (timeValue)) { //不属于今年
-                var returnTime = formatDateTime(timeValue).substr(0,11);
+                var returnTime = timeValue.substr(0,16);
             }
             return returnTime;
         }
 
 </script>
-
-
-
-
-
-
-
 </body>
 </html>

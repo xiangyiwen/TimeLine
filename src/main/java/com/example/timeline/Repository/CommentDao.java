@@ -11,7 +11,7 @@ import java.util.List;
 public interface CommentDao {
 //    这里不能用interval，这个是MySQL的关键词，巨坑
     @Insert("INSERT INTO comment(name,content,time) VALUES(#{name}, #{content}, #{time})")
-    void comAdd(@Param("name") String name, @Param("content") String content, @Param("time") long time);
+    void comAdd(@Param("name") String name, @Param("content") String content, @Param("time") String time);
 
     @Select("SELECT * FROM comment")
     List<Comment> getComments();
