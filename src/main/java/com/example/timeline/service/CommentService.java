@@ -28,13 +28,15 @@ public class CommentService {
                 "但是执行静态代码块中的代码时,@Autowired还没有注入进来,会报NullPoint。",time);
     }
 
-
+    /*
+        把返回的数据按照时间发布时间最近到最远进行排序，只取前i条记录
+     */
     public List<Comment> getComments(int i){
         List<Comment> des;
         des = commentDao.getComments();
         Collections.reverse(des);
         List<Comment> res = new ArrayList<>();
-        res.addAll(des.subList(0,Math.min(i,des.size())));
+        res.addAll(des.subList(0,Math.min(i,des.size())));    //只要返回前i个，若不够则返回有的
         return res;
     }
 

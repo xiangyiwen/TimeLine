@@ -2,7 +2,6 @@ package com.example.timeline.Repository;
 
 import com.example.timeline.Do.Comment;
 import org.junit.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
