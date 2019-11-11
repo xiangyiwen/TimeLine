@@ -23,7 +23,7 @@ public class CommentService {
         Date date = new Date();
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time = f.format(date);
-        commentDao.comAdd("用户"+i,"想要在项目启动时初始化一些静态变量(从数据库里查出来的)首先想到了使用 static{ }静态代码块, " +
+        commentDao.comAdd(i,"用户"+i,"想要在项目启动时初始化一些静态变量(从数据库里查出来的)首先想到了使用 static{ }静态代码块, " +
                 "但是静态代码块的执行顺序在@Autowired注入的Service层之前。也就是说要在静态代码块中访问数据库, " +
                 "但是执行静态代码块中的代码时,@Autowired还没有注入进来,会报NullPoint。",time);
     }

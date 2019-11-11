@@ -273,5 +273,40 @@
         }
 
 </script>
+
+    <!--<script src="jasmine-standalone-3.5.0/lib/jasmine-3.5.0/jasmine.js"></script>-->
+    <!--<script src="jasmine-standalone-3.5.0/lib/jasmine-3.5.0/jasmine-html.js"></script>-->
+    <!--<script src="jasmine-standalone-3.5.0/lib/jasmine-3.5.0/boot.js"></script>-->
+<!--<script>-->
+    <!--describe("这是一个测试模块", function() {-->
+
+        <!--it("测试方法1", function(done) {-->
+
+            <!--// 服务器返回的结果-->
+            <!--var result;-->
+
+            <!--//被测的普通ajax请求-->
+            <!--$.getJSON("http://localhost:8080/test/get1").then(function(jsonObj) {-->
+                <!--result = jsonObj;-->
+            <!--});-->
+
+            <!--// 由于是异步请求，需要使用setTimeout延迟100验证-->
+            <!--setTimeout(function() {-->
+                <!--expect(result).toEqual(-->
+                    <!--//如果返回的json是这个 就测试通过-->
+                    <!--{-->
+                        <!--"data" : "get1 ok"-->
+                    <!--}-->
+                <!--);-->
+
+                <!--// 校验完成，通知jasmine框架-->
+                <!--done();-->
+            <!--}, 100);-->
+
+        <!--});//测试方法1结束-->
+
+        <!--//其他测试方法可以继续加里面-->
+    <!--});-->
+<!--</script>-->
 </body>
 </html>

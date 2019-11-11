@@ -46,8 +46,8 @@ public class CommentDaoTest {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time = f.format(date);
 
-        Comment c = new Comment("xiangyiwen","success",time);
-        commentDao.comAdd(c.getName(),c.getContent(),c.getTime());
+        Comment c = new Comment(100,"xiangyiwen","success",time);
+        commentDao.comAdd(c.getId(),c.getName(),c.getContent(),c.getTime());
         List<Comment> res = commentDao.findByname("xiangyiwen");
         assertAll(
                 ()->assertNotNull(res),

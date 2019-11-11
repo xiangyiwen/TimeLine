@@ -21,12 +21,10 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-
-
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class CommentServiceTest {
     @Mock
@@ -48,12 +46,17 @@ public class CommentServiceTest {
         String time = f.format(date);
 
         List<Comment> comments = new ArrayList<>();
-        Comment c = new Comment("用户28","just for test",time);
+        Comment c = new Comment(28,"用户28","just for test",time);
         comments.add(c);
         when(commentDao.getComments()).thenReturn(comments);
+        doNothing().when(commentDao).comAdd(anyInt(),anyString(),anyString(),anyString());
 
         commentService.comAdd(28);
         List<Comment> des = commentService.getComments(1);
+
+        verify(commentDao,times(1)).comAdd(anyInt(),anyString(),anyString(),anyString());
+        verify(commentDao,times(1)).getComments();
+        verifyNoMoreInteractions(commentDao);
         assertAll(
                 ()->assertEquals("用户28",des.get(0).getName()),
                 ()->assertEquals("just for test",des.get(0).getContent()),
@@ -70,15 +73,18 @@ public class CommentServiceTest {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         List<Comment> comments = new ArrayList<>();
-        Comment c1 = new Comment("用户1","content1",f.format(date1));
-        Comment c2 = new Comment("用户2","content2",f.format(date2));
-        Comment c3 = new Comment("用户3","content3",f.format(date3));
+        Comment c1 = new Comment(1,"用户1","content1",f.format(date1));
+        Comment c2 = new Comment(2,"用户2","content2",f.format(date2));
+        Comment c3 = new Comment(3,"用户3","content3",f.format(date3));
         comments.add(c1);
         comments.add(c2);
         comments.add(c3);
         when(commentDao.getComments()).thenReturn(comments);
 
         List<Comment> des = commentService.getComments(2);
+
+        verify(commentDao,times(1)).getComments();
+        verifyNoMoreInteractions(commentDao);
         assertAll(
                 ()->assertEquals(2,des.size(),"参数为2，应该只返回两个Comment"),
                 ()->assertEquals("用户3",des.get(0).getName(),"List反转失败"),

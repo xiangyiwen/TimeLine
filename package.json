@@ -1,0 +1,19 @@
+{
+  "name": "timeline",
+  "version": "1.0.0",
+  "description": "设计一个非完整的留言板（前后端+数据库）",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiangyiwen/TimeLine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiangyiwen/TimeLine/issues"
+  },
+  "homepage": "https://github.com/xiangyiwen/TimeLine#readme"
+}

@@ -20,9 +20,10 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class CommentControllerTest {
     @Mock
@@ -45,15 +46,20 @@ public class CommentControllerTest {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         List<Comment> comments = new ArrayList<>();
-        Comment c3 = new Comment("用户3","content3",f.format(date3));
-        Comment c2 = new Comment("用户2","content2",f.format(date2));
-        Comment c1 = new Comment("用户1","content1",f.format(date1));
+        Comment c3 = new Comment(3,"用户3","content3",f.format(date3));
+        Comment c2 = new Comment(2,"用户2","content2",f.format(date2));
+        Comment c1 = new Comment(1,"用户1","content1",f.format(date1));
         comments.add(c3);
         comments.add(c2);
         comments.add(c1);
         when(commentService.getComments(3)).thenReturn(comments);
+        doNothing().when(commentService).comAdd(anyInt());
 
         List<Comment> res = commentController.upload();
+
+        verify(commentService,times(1)).comAdd(anyInt());
+        verify(commentService,times(1)).getComments(3);
+        verifyNoMoreInteractions(commentService);
         assertAll(
                 ()->assertNotNull(res),
                 ()->assertEquals(3,res.size(),"获得Comment的长度应该是3"),
@@ -80,11 +86,11 @@ public class CommentControllerTest {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         List<Comment> comments = new ArrayList<>();
-        Comment c5 = new Comment("用户5","content5",f.format(date5));
-        Comment c4 = new Comment("用户4","content4",f.format(date4));
-        Comment c3 = new Comment("用户3","content3",f.format(date3));
-        Comment c2 = new Comment("用户2","content2",f.format(date2));
-        Comment c1 = new Comment("用户1","content1",f.format(date1));
+        Comment c5 = new Comment(5,"用户5","content5",f.format(date5));
+        Comment c4 = new Comment(4,"用户4","content4",f.format(date4));
+        Comment c3 = new Comment(3,"用户3","content3",f.format(date3));
+        Comment c2 = new Comment(2,"用户2","content2",f.format(date2));
+        Comment c1 = new Comment(1,"用户1","content1",f.format(date1));
         comments.add(c5);
         comments.add(c4);
         comments.add(c3);
@@ -93,6 +99,9 @@ public class CommentControllerTest {
         when(commentService.getComments(5)).thenReturn(comments);
 
         List<Comment> res = commentController.load();
+
+        verify(commentService,times(1)).getComments(5);
+        verifyNoMoreInteractions(commentService);
         assertAll(
                 ()->assertNotNull(res),
                 ()->assertEquals(5,res.size(),"应该返回5条Comment"),
