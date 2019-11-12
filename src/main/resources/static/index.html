@@ -123,7 +123,7 @@
         </div>
     </div>
 
-<script src="js/vue/2.5.16/vue.min.js"></script>    <!--产生Vue对象-->
+<script src="js/vue/2.5.16/vue.min.js"></script>    <!--产生Vue对象-->  <!--好像默认/path是webapp下面的文件-->
 <script src="js/jquery/2.0.0/jquery.min.js"></script>       <!--//产生$-->
 <script src="js/axios/0.17.1/axios.min.js"></script>
 <script>
@@ -240,7 +240,7 @@
             var today = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(); //今天凌晨
             var yestday = new Date(today - 24 * 3600 * 1000).getTime();
             return time < today && yestday <= time;
-        };
+        }
 
         //判断传入日期是否属于今年
         function isYear (timeValue) {
@@ -257,56 +257,21 @@
             var timeDiffer = timeNew - time; //与当前时间误差
             var returnTime = '';
             if(timeDiffer <= 60000) { //一分钟内
-                var returnTime = '刚刚';
+                returnTime = '刚刚';
             } else if(timeDiffer > 60000 && timeDiffer < 3600000) { //1小时内
-                var returnTime = Math.floor(timeDiffer / 60000 )+ '分钟前';
+                returnTime = Math.floor(timeDiffer / 60000 )+ '分钟前';
             } else if(timeDiffer >= 3600000 && timeDiffer < 86400000 && !isYestday(timeValue)) { //今日
-                var returnTime = timeValue.substr(11,5);
+                returnTime = timeValue.substr(11,5);
             } else if(timeDiffer > 3600000 && isYestday( timeValue)) { //昨天
-                var returnTime = '昨天'+ timeValue.substr(11,5);
+                returnTime = '昨天'+ timeValue.substr(11,5);
             } else if (timeDiffer > 86400000 && !isYestday(timeValue) && isYear (timeValue)){	//今年
-                var returnTime = timeValue.substr(5,11);
+                returnTime = timeValue.substr(5,11);
             } else if (timeDiffer > 86400000 && !isYestday( timeValue) && !isYear (timeValue)) { //不属于今年
-                var returnTime = timeValue.substr(0,16);
+                returnTime = timeValue.substr(0,16);
             }
             return returnTime;
         }
 
 </script>
 
-    <!--<script src="jasmine-standalone-3.5.0/lib/jasmine-3.5.0/jasmine.js"></script>-->
-    <!--<script src="jasmine-standalone-3.5.0/lib/jasmine-3.5.0/jasmine-html.js"></script>-->
-    <!--<script src="jasmine-standalone-3.5.0/lib/jasmine-3.5.0/boot.js"></script>-->
-<!--<script>-->
-    <!--describe("这是一个测试模块", function() {-->
-
-        <!--it("测试方法1", function(done) {-->
-
-            <!--// 服务器返回的结果-->
-            <!--var result;-->
-
-            <!--//被测的普通ajax请求-->
-            <!--$.getJSON("http://localhost:8080/test/get1").then(function(jsonObj) {-->
-                <!--result = jsonObj;-->
-            <!--});-->
-
-            <!--// 由于是异步请求，需要使用setTimeout延迟100验证-->
-            <!--setTimeout(function() {-->
-                <!--expect(result).toEqual(-->
-                    <!--//如果返回的json是这个 就测试通过-->
-                    <!--{-->
-                        <!--"data" : "get1 ok"-->
-                    <!--}-->
-                <!--);-->
-
-                <!--// 校验完成，通知jasmine框架-->
-                <!--done();-->
-            <!--}, 100);-->
-
-        <!--});//测试方法1结束-->
-
-        <!--//其他测试方法可以继续加里面-->
-    <!--});-->
-<!--</script>-->
 </body>
-</html>
