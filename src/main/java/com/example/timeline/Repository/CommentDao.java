@@ -19,4 +19,7 @@ public interface CommentDao {
 
     @Select("SELECT * FROM comment where name = #{name}")
     List<Comment> findByname(@Param("name") String name);
+
+    @Delete("DELETE FROM comment where name = #{name}" )
+    void deleteByname(@Param("name") String name );
 }

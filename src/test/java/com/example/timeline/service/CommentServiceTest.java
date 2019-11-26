@@ -4,15 +4,18 @@ import com.example.timeline.Do.Comment;
 import com.example.timeline.Repository.CommentDao;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
 import com.example.timeline.service.CommentService;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
@@ -38,9 +41,10 @@ public class CommentServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
+
     @Test
     @DisplayName(value = "测试是否成功增加")
-    public void addContentTest() {
+    public void shouldAddUser28() {
         Date date = new Date();
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time = f.format(date);
@@ -66,7 +70,7 @@ public class CommentServiceTest {
 
     @Test
     @DisplayName(value = "测试返回的格式")
-    public void getCommentsTest() {
+    public void shouldReturnInDecreasingOrder() {
         Date date1 = new Date();
         Date date2 = new Date();
         Date date3 = new Date();
