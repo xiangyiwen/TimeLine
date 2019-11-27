@@ -44,7 +44,7 @@ public class CommentServiceTest {
 
     @Test
     @DisplayName(value = "测试是否成功增加")
-    public void shouldAddUser28() {
+    public void should_Add_User28() {
         Date date = new Date();
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time = f.format(date);
@@ -70,7 +70,7 @@ public class CommentServiceTest {
 
     @Test
     @DisplayName(value = "测试返回的格式")
-    public void shouldReturnInDecreasingOrder() {
+    public void should_return_in_decreasing_order() {
         Date date1 = new Date();
         Date date2 = new Date();
         Date date3 = new Date();

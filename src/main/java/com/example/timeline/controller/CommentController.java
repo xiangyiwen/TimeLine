@@ -27,6 +27,11 @@ public class CommentController {
     private static int i = 5;
     private static int j = 13;
 
+    public void initial(){
+        i = 5;
+        j = 13;
+    }
+
 //    @Resource
 //    private DataSource dataSource;
 //

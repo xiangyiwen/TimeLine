@@ -46,7 +46,7 @@ public class CommentDaoTest {
     }
 
     @Test
-    public void TestAddComment() throws SQLException {
+    public void should_add_xiangyiwen() throws SQLException {
         List<Comment> res = commentDao.findByname("xiangyiwen");
 
         int count = res.size()-1;
@@ -60,7 +60,7 @@ public class CommentDaoTest {
 
     @Test
 //    @DisplayName("测试返回的数据")
-    public void TestGetAllComments() throws SQLException {
+    public void should_get_all_comments() throws SQLException {
         List<Comment> results = commentDao.getComments();
         assertAll(
                 ()->assertNotNull(results,"结果为空！"),
@@ -68,7 +68,6 @@ public class CommentDaoTest {
                 ()->assertEquals(c.getTime(),results.get(originlength).getTime()),
                 ()->assertEquals("success",results.get(originlength).getContent())
         );
-
         assertEquals(originlength+1,results.size(),"Comment的数量不符合！");
     }
 
