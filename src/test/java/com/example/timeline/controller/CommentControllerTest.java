@@ -4,10 +4,13 @@ import com.example.timeline.Do.Comment;
 import com.example.timeline.Repository.CommentDao;
 import com.example.timeline.service.CommentService;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,17 +36,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CommentControllerTest {
     @Mock
-    private CommentService commentService;
+    private CommentService commentService;      //全部为空
 
     @InjectMocks
-    private CommentController commentController;
+    private CommentController commentController;    //调用的真实代码（只能是per-class）
 
     @Before
     public void setUp() throws Exception{
-        MockitoAnnotations.initMocks(this);
-        commentController.initial();
+        MockitoAnnotations.initMocks(this);     //初始化一个commentController实例，整个测试类就一个
+        // 所以规定测试方法执行的顺序，来避免在产品代码中增加测试逻辑
     }
 
     @Test
@@ -65,9 +69,9 @@ public class CommentControllerTest {
 
         ArgumentCaptor<Integer> intArgCaptor = ArgumentCaptor.forClass(Integer.class);
 
+//        commentController.upload();   由于测试1已经调用过一次
         commentController.upload();
-        commentController.upload();
-        verify(commentService,times(2)).comAdd(intArgCaptor.capture());
+        verify(commentService,times(1)).comAdd(intArgCaptor.capture());
         assertEquals(Integer.valueOf(14), intArgCaptor.getValue(),"应该新增用户14");
     }
 
@@ -91,9 +95,9 @@ public class CommentControllerTest {
 
         ArgumentCaptor<Integer> intArgCaptor = ArgumentCaptor.forClass(Integer.class);
 
+//        commentController.load();
         commentController.load();
-        commentController.load();
-        verify(commentService,times(2)).getComments(intArgCaptor.capture());
+        verify(commentService,times(1)).getComments(intArgCaptor.capture());
         assertEquals(Integer.valueOf(7), intArgCaptor.getValue());
     }
 
